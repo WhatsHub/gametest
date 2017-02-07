@@ -1,1 +1,1 @@
-Pycharm project testing the pygame framework, getting familiar with python
+playing around with python and the pygame framework
