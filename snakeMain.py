@@ -133,6 +133,7 @@ while True:
         # if the player hits one of the snakes tails the game is over
         for i in range(1, len(snake)):
             if snake[i][0] == headPosX and snake[i][1] == headPosY:
+                fpsClock.tick(1)
                 pygame.quit()
                 sys.exit()
 
@@ -143,25 +144,30 @@ while True:
 
     # process input from the player
     for event in pygame.event.get():
+
+        if snakeoutside():
+            inputQueue.queue.clear()
+            inputQueue.put(direction)
+
         if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
             pygame.quit()
             sys.exit()
-        elif event.type == KEYUP and event.key == K_RIGHT and not snakeoutside():
+        elif event.type == KEYUP and event.key == K_RIGHT:
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(RIGHT)
-        elif event.type == KEYUP and event.key == K_LEFT and not snakeoutside():
+        elif event.type == KEYUP and event.key == K_LEFT:
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(LEFT)
-        elif event.type == KEYUP and event.key == K_DOWN and not snakeoutside():
+        elif event.type == KEYUP and event.key == K_DOWN:
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(DOWN)
-        elif event.type == KEYUP and event.key == K_UP and not snakeoutside():
+        elif event.type == KEYUP and event.key == K_UP:
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
