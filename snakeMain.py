@@ -45,6 +45,12 @@ inputQueue = Queue(2)
 # initial direction of the head
 direction = RIGHT
 
+def snakeoutside():
+    if snake[0][0] > 655 or snake[0][0] < 5:
+        return True
+    if snake[0][1] > 475 or snake[0][1] < 5:
+        return True
+    return False
 
 # True if the two directions dir1 and dir2 are opposite
 def opposite(dir1, dir2):
@@ -140,22 +146,22 @@ while True:
         if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
             pygame.quit()
             sys.exit()
-        elif event.type == KEYUP and event.key == K_RIGHT:
+        elif event.type == KEYUP and event.key == K_RIGHT and not snakeoutside():
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(RIGHT)
-        elif event.type == KEYUP and event.key == K_LEFT:
+        elif event.type == KEYUP and event.key == K_LEFT and not snakeoutside():
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(LEFT)
-        elif event.type == KEYUP and event.key == K_DOWN:
+        elif event.type == KEYUP and event.key == K_DOWN and not snakeoutside():
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
                 inputQueue.put(DOWN)
-        elif event.type == KEYUP and event.key == K_UP:
+        elif event.type == KEYUP and event.key == K_UP and not snakeoutside():
             if inputQueue.full():
                 inputQueue.queue.clear()
             else:
