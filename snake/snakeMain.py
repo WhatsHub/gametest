@@ -15,7 +15,7 @@ last = pygame.time.get_ticks()
 DISPLAYSURF = pygame.display.set_mode((660, 480))
 pygame.display.set_caption('Python!')
 
-# set up the colors
+# set up the colors ein test
 BLACK       = (  0,       0,      0)
 GREEN       = (  0,     255,      0)
 RED         = (255,       0,      0)
