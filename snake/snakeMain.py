@@ -25,10 +25,6 @@ NAVYBLUE    = ( 60,      60,    100)
 # draw the background on the surface object
 DISPLAYSURF.fill(NAVYBLUE)
 
-# sound mixer
-pygame.mixer.music.load("music/always.mp3")
-pygame.mixer.music.play(-1, 22.7)
-
 # snake x and y coordinates
 
 snake = [(5, 5)] # snake head start position X = 5, Y = 5
@@ -73,11 +69,6 @@ def opposite(dir1, dir2):
 
 
 def gameover():
-    pygame.mixer.music.stop()
-    pygame.mixer.music.load("music/scratch.wav")
-    pygame.mixer.music.play()
-    time.sleep(2)
-    pygame.mixer.music.stop()
     pygame.quit()
     sys.exit()
 
@@ -201,7 +192,6 @@ while True:
                 inputQueue.put(direction)
 
         if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
-            pygame.mixer.music.stop()
             pygame.quit()
             sys.exit()
         elif event.type == KEYUP and event.key == K_RIGHT:
