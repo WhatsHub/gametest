@@ -36,5 +36,3 @@ class snake:
 
     def getTail(self):
         return self.__snake.pop(0)
-
-
