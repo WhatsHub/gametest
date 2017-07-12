@@ -2,6 +2,7 @@ import pygame, sys, random, time
 from pygame.locals import *
 from queue import *
 
+# Initialization for pygame library
 pygame.init()
 
 GAMEBOARD = (660, 480)
@@ -27,7 +28,6 @@ NAVYBLUE    = ( 60,      60,    100)
 DISPLAYSURF.fill(NAVYBLUE)
 
 # snake x and y coordinates
-
 snake = [(5, 5)] # snake head start position X = 5, Y = 5
 
 # the apple's position
@@ -46,6 +46,7 @@ inputQueue = Queue(2)
 # initial direction of the head
 direction = RIGHT
 
+# detects if the snake is outside of the Gamescreen
 def snakeoutside():
     if snake[0][0] > 655 or snake[0][0] < 5:
         return True
@@ -68,7 +69,7 @@ def opposite(dir1, dir2):
 
 
 
-
+# gameover routine
 def gameover():
     pygame.quit()
     sys.exit()
