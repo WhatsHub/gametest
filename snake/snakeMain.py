@@ -4,6 +4,7 @@ from queue import *
 
 pygame.init()
 
+GAMEBOARD = (660, 480)
 FPS = 30  # frames per second setting
 SPEED = 200
 fpsClock = pygame.time.Clock()
@@ -12,8 +13,8 @@ fpsClock = pygame.time.Clock()
 last = pygame.time.get_ticks()
 
 # set up the window
-DISPLAYSURF = pygame.display.set_mode((660, 480))
-pygame.display.set_caption('Python!')
+DISPLAYSURF = pygame.display.set_mode(GAMEBOARD)
+pygame.display.set_caption('Snake!')
 
 # set up the colors
 BLACK       = (  0,       0,      0)
@@ -175,13 +176,13 @@ while True:
     for event in pygame.event.get():
 
         if snakeoutside():
-            if snake[0][0] > 655:
+            if snake[0][0] > GAMEBOARD[0]-5:
                 inputQueue.queue.clear()
                 inputQueue.put(RIGHT)
             elif snake[0][0] < 5:
                 inputQueue.queue.clear()
                 inputQueue.put(LEFT)
-            elif snake[0][1] > 475:
+            elif snake[0][1] > GAMEBOARD[1]-5:
                 inputQueue.queue.clear()
                 inputQueue.put(DOWN)
             elif snake[0][1] < 5:
