@@ -1,6 +1,7 @@
 import pygame, sys, random, time
 from pygame.locals import *
 from queue import *
+from snake import *
 
 # Initialization for pygame library
 pygame.init()
@@ -28,7 +29,8 @@ NAVYBLUE    = ( 60,      60,    100)
 DISPLAYSURF.fill(NAVYBLUE)
 
 # snake x and y coordinates
-snake = [(5, 5)] # snake head start position X = 5, Y = 5
+snakeHead = snake(5,5)
+#snake = [(5, 5)] # snake head start position X = 5, Y = 5
 
 # the apple's position
 applePosX = random.randint(0, 10) * 60
@@ -48,9 +50,9 @@ direction = RIGHT
 
 # detects if the snake is outside of the Gamescreen
 def snakeoutside():
-    if snake[0][0] > 655 or snake[0][0] < 5:
+    if snakeHead.getHeadPosX() > 655 or snakeHead.getHeadPosX() < 5:
         return True
-    if snake[0][1] > 475 or snake[0][1] < 5:
+    if snakeHead.getHeadPosY() > 475 or snakeHead.getHeadPosY() < 5:
         return True
     return False
 
@@ -71,6 +73,7 @@ def opposite(dir1, dir2):
 
 # gameover routine
 def gameover():
+    print ("GAME OVER")
     pygame.quit()
     sys.exit()
 
@@ -78,8 +81,8 @@ def gameover():
 while True:
 
     # for readability
-    headPosX = snake[0][0]
-    headPosY = snake[0][1]
+    headPosX = snakeHead.getHeadPosX()
+    headPosY = snakeHead.getHeadPosY()
 
     # draw background over the last frame
     DISPLAYSURF.fill(NAVYBLUE)
@@ -88,15 +91,18 @@ while True:
     pygame.draw.rect(DISPLAYSURF, RED, (applePosX, applePosY, 60, 60))
 
     # draw the snake's head
-    pygame.draw.rect(DISPLAYSURF, YELLOW, (headPosX - 5, headPosY - 5, 60, 60))
-    pygame.draw.rect(DISPLAYSURF, GREEN, (headPosX, headPosY, 50, 50))
+    #pygame.draw.rect(DISPLAYSURF, YELLOW, (headPosX - 5, headPosY - 5, 60, 60))
+    #pygame.draw.rect(DISPLAYSURF, GREEN, (headPosX, headPosY, 50, 50))
 
 
 
     # draw the snake's tail
-    for i in range(1, len(snake)):
-        pygame.draw.rect(DISPLAYSURF, BLACK, (snake[i][0] - 5, snake[i][1] - 5, 60, 60))
-        pygame.draw.rect(DISPLAYSURF, GREEN, (snake[i][0], snake[i][1], 50, 50))
+    #for i in range(1, len(snake)):
+        #pygame.draw.rect(DISPLAYSURF, BLACK, (snake[i][0] - 5, snake[i][1] - 5, 60, 60))
+        #pygame.draw.rect(DISPLAYSURF, GREEN, (snake[i][0], snake[i][1], 50, 50))
+
+    #draw the snake
+    snakeHead.drawSnake(DISPLAYSURF)
 
     # get current time
     now = pygame.time.get_ticks()
@@ -111,35 +117,17 @@ while True:
                 direction = tmp;
 
         # moving the snake's tail accordingly
-        for i in range(len(snake) - 1, 0, -1):
-            snake[i] = snake[i - 1]
+        snakeHead.moveSnake(direction)
 
-        # moving the snake's head according to it's direction
-        if direction == RIGHT:
-            headPosX += 60
-            if 717 <= headPosX >= 723:
-                headPosX = 5
-
-        elif direction == DOWN:
-            headPosY += 60
-            if 517 <= headPosY >= 523:
-                headPosY = 5
-
-        elif direction == LEFT:
-            headPosX -= 60
-            if -52 >= headPosX <= -58:
-                headPosX = 605
-
-        elif direction == UP:
-            headPosY -= 60
-            if -57 >= headPosY <= -63:
-                headPosY = 425
+        # TODO: GAME OVER WHEN SNAKE EATS AN APPLE. FIX pls
+        #                                - JF, 18:15 19.07.2017
 
         # what happens when the snake eats the apple
-        if headPosX - 5 == applePosX and headPosY - 5 == applePosY:
-            snake.append((snake[0][0], snake[0][1]))
+        if snakeHead.getHeadPosX() - 5 == applePosX and snakeHead.getHeadPosY() - 5 == applePosY:
+            snakeHead.addSnakePart()
             xyrows = [[True] * 8 for i in range(0, 11)]
 
+            snake = snakeHead.getSnake()
             for i in range(0, 11):
                 for j in range(0, 8):
                     for k in range(0, len(snake)):
@@ -163,12 +151,9 @@ while True:
             applePosY = possiblespawns[0][1] * 60
 
         # if the player hits one of the snakes tails the game is over
-        for i in range(1, len(snake)):
-            if snake[i][0] == headPosX and snake[i][1] == headPosY:
-                fpsClock.tick(1)
-                gameover()
-
-        snake[0] = (headPosX, headPosY)
+        if snakeHead.collides():
+            fpsClock.tick(1)
+            gameover()
 
         # set the last time variable to 'now'
         last = now
@@ -177,16 +162,16 @@ while True:
     for event in pygame.event.get():
 
         if snakeoutside():
-            if snake[0][0] > GAMEBOARD[0]-5:
+            if snakeHead.getHeadPosX() > GAMEBOARD[0]-5:
                 inputQueue.queue.clear()
                 inputQueue.put(RIGHT)
-            elif snake[0][0] < 5:
+            elif snakeHead.getHeadPosX() < 5:
                 inputQueue.queue.clear()
                 inputQueue.put(LEFT)
-            elif snake[0][1] > GAMEBOARD[1]-5:
+            elif snakeHead.getHeadPosY() > GAMEBOARD[1]-5:
                 inputQueue.queue.clear()
                 inputQueue.put(DOWN)
-            elif snake[0][1] < 5:
+            elif snakeHead.getHeadPosY() < 5:
                 inputQueue.queue.clear()
                 inputQueue.put(UP)
             else:
