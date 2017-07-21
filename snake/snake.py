@@ -7,6 +7,7 @@ class snake:
     def __init__(self, headPosX, headPosY):
         self.__snake.append((headPosX, headPosY))
 
+    # TODO: Make Gameboard bounds not static
     def moveSnake(self, direction):
         # moving the snake's tail accordingly
         for i in range(len(self.__snake) - 1, 0, -1):
@@ -37,6 +38,7 @@ class snake:
 
         self.setHeadPos(headposx, headposy)
 
+    # TODO: Make snake size not static
     def drawSnake(self, displaysurfaces):
 
         # draw the snake's head
@@ -49,9 +51,9 @@ class snake:
             pygame.draw.rect(displaysurfaces, (0, 255, 0), (self.__snake[i][0], self.__snake[i][1], 50, 50))
 
     def collides(self):
-        #for i in range(1, len(self.__snake)):
-        #    if self.__snake[i][0] == self.getHeadPosX() and self.__snake[i][1] == self.getHeadPosY():
-        #        return True
+        for i in range(1, len(self.__snake)):
+            if self.__snake[i][0] == self.getHeadPosX() and self.__snake[i][1] == self.getHeadPosY():
+                return True
         return False
 
     def addSnakePart(self):

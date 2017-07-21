@@ -48,6 +48,7 @@ inputQueue = Queue(2)
 # initial direction of the head
 direction = RIGHT
 
+# TODO: make gameboard bounds of snakeoutside() not static
 # detects if the snake is outside of the Gamescreen
 def snakeoutside():
     if snakeHead.getHeadPosX() > 655 or snakeHead.getHeadPosX() < 5:
@@ -80,26 +81,12 @@ def gameover():
 # main game loop
 while True:
 
-    # for readability
-    headPosX = snakeHead.getHeadPosX()
-    headPosY = snakeHead.getHeadPosY()
-
     # draw background over the last frame
     DISPLAYSURF.fill(NAVYBLUE)
 
+    # TODO: Create class to handle the apple
     # draw the apple
     pygame.draw.rect(DISPLAYSURF, RED, (applePosX, applePosY, 60, 60))
-
-    # draw the snake's head
-    #pygame.draw.rect(DISPLAYSURF, YELLOW, (headPosX - 5, headPosY - 5, 60, 60))
-    #pygame.draw.rect(DISPLAYSURF, GREEN, (headPosX, headPosY, 50, 50))
-
-
-
-    # draw the snake's tail
-    #for i in range(1, len(snake)):
-        #pygame.draw.rect(DISPLAYSURF, BLACK, (snake[i][0] - 5, snake[i][1] - 5, 60, 60))
-        #pygame.draw.rect(DISPLAYSURF, GREEN, (snake[i][0], snake[i][1], 50, 50))
 
     #draw the snake
     snakeHead.drawSnake(DISPLAYSURF)
@@ -119,8 +106,11 @@ while True:
         # moving the snake's tail accordingly
         snakeHead.moveSnake(direction)
 
-        # TODO: GAME OVER WHEN SNAKE EATS AN APPLE. FIX pls
-        #                                - JF, 18:15 19.07.2017
+        # if the player hits one of the snakes tails the game is over
+        if snakeHead.collides():
+            fpsClock.tick(1)
+            gameover()
+
 
         # what happens when the snake eats the apple
         if snakeHead.getHeadPosX() - 5 == applePosX and snakeHead.getHeadPosY() - 5 == applePosY:
@@ -150,10 +140,6 @@ while True:
             applePosX = possiblespawns[0][0] * 60
             applePosY = possiblespawns[0][1] * 60
 
-        # if the player hits one of the snakes tails the game is over
-        if snakeHead.collides():
-            fpsClock.tick(1)
-            gameover()
 
         # set the last time variable to 'now'
         last = now
